@@ -1,0 +1,86 @@
+\documentclass[aspectratio=169,xcolor=dvipsnames]{beamer}
+
+% -----------------------------------------
+% Math + Fonts (Academic Sans + Math)
+% -----------------------------------------
+\usepackage{fontspec}
+
+% Text fonts
+\setmainfont{Source Sans Pro}
+\setsansfont{Source Sans Pro}
+\renewcommand{\familydefault}{\sfdefault}
+
+% Load mathtools before unicode-math
+\usepackage{mathtools}
+
+% Prevent unicode-math from overwriting mathtools symbols
+\ExplSyntaxOn
+\bool_gset_false:N \g__um_fonts_colon_equal_bool
+\bool_gset_false:N \g__um_fonts_overbracket_bool
+\ExplSyntaxOff
+
+% Math font
+\usepackage{unicode-math}
+\setmathfont{Latin Modern Math}
+% \setmathfont{Tex Gyre Pagella Math}
+
+% --------------------------
+% Theme
+% --------------------------
+\usetheme{SimplePlus}
+
+% --------------------------
+% Packages
+% --------------------------
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{transparent}
+\usepackage{subcaption}
+\usepackage[table]{xcolor}
+\usepackage{multicol}
+\usepackage{bookmark}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{tikz}
+\usepackage[
+    backend=biber,
+    style=ieee,
+    maxnames=6,
+    url=true
+]{biblatex}
+
+\addbibresource{meta/reference.bib}
+
+\usetikzlibrary{calc,positioning,arrows.meta,shapes}
+
+\input{meta/commands}
+\input{meta/title}
+
+\begin{document}
+
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}{Overview}
+	\tableofcontents
+\end{frame}
+
+\input{sections/index}
+
+\section*{References}
+\begin{frame}[allowframebreaks]{References}
+	\footnotesize
+	\printbibliography
+\end{frame}
+
+\begin{frame}[plain]
+	\vfill
+	\centering
+	\Huge\textbf{\textcolor{structure}{Thank You}}
+	\vfill
+\end{frame}
+
+\end{document}
