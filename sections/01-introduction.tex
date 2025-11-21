@@ -1,1 +1,182 @@
 \section{Introduction}
+
+\subsection{Robot Learning} {
+	\begin{frame}{Can we Teach Robots?}
+		\begin{columns}[T]
+			\begin{column}{0.45\linewidth}
+				\begin{itemize}
+					\item How do machines learn?
+					\item Are \textbf{learning frameworks} enough?
+					\item Sensor input, action output; \textit{Is it really that simple?}
+					\item Robots today can perform mundane, small tasks
+				\end{itemize}
+
+				\begin{block}{Trust Issues?}
+					I trust \textit{ChatGPT} to make slides, why not let \textit{Franka} make you a sandwich?
+				\end{block}
+			\end{column}
+			\begin{column}{0.45\linewidth}
+				\begin{figure}
+					\begin{center}
+						\includegraphics[width=0.95\textwidth]{figures/franka-sandwich.png}
+					\end{center}
+					\caption{Scepticism surrounds autonomous robots}
+				\end{figure}
+			\end{column}
+		\end{columns}
+	\end{frame}
+
+	\begin{frame}{Capability vs. Trust}
+		\begin{columns}[T]
+			\begin{column}{0.6\linewidth}
+				\begin{itemize}
+					\item<1-> SOTA robot models like $\pi$~\cite{black2024pi_0,intelligence2025pi_}, OpenVLA~\cite{openvla} look so promising in demos
+					\item<1-> Household adoption still rare
+					\item<1-> Out of distribution tasks difficult for these policies
+					\item<1-> \textbf{Trustworthy} robot models are the next stepping stone
+				\end{itemize}
+				\pause
+				\begin{block}{The Age of Trustworthy AI?}
+					Perhaps the next ``wave'' in AI will be lead by models humans \textbf{trust}
+				\end{block}
+			\end{column}
+			\begin{column}{0.35\linewidth}
+				\onslide<1->
+				\begin{figure}
+					\begin{center}
+						\includegraphics[width=0.95\textwidth]{figures/robot-learning.png}
+					\end{center}
+					\caption{Trust is built slowly and broken fast}
+				\end{figure}
+			\end{column}
+		\end{columns}
+	\end{frame}
+
+	\begin{frame}{Robots? Who Cares?}
+		\begin{itemize}
+			\item A researcher who needs to focus on Langevin Dynamics, not laundry
+			\item A firefighter or disaster relief worker, with more than one life resting on their shoulders
+			\item An elderly couple, that needs help with daily chores
+		\end{itemize}
+	\end{frame}
+}
+
+\subsection{Literature Review} {
+	\begin{frame}{Robot Learning Paradigms}
+		\textbf{Sequence Modeling}
+		\begin{itemize}
+			\item Action Chunking with Transformers~\cite{act}
+			\item Diffusion Policy~\cite{chi2024diffusionpolicy}
+			\item Flow Matching Policy~\cite{Lipman2022FlowMF,black2024pi_0,intelligence2025pi_,Shukor2025SmolVLAAV}
+		\end{itemize}
+
+		\textbf{Open-World Understanding with Vision-Language Action}
+		\begin{itemize}
+			\item OpenVLA~\cite{openvla}
+			\item $\pi_0$~\cite{black2024pi_0}, $\pi_{0.5}$~\cite{intelligence2025pi_}
+			\item Octo~\cite{Team2024OctoAO}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{Energy Based Models}
+		\begin{equation}
+			\textcolor{black}{E}(\textcolor{Magenta}{\mathbf{x}}, \textcolor{Blue}{\mathbf{y}}) =
+			\textcolor{PineGreen}{f_\theta}(\textcolor{Magenta}{\mathbf{x}},\textcolor{Blue}{\mathbf{y}})
+			\label{eq:ebm}
+		\end{equation}
+		\begin{itemize}
+			\item What if we let robots explore their environment and learn dynamics?
+			\item Make the \textcolor{PineGreen}{model} predict what the \textcolor{Blue}{rest of the world looks like}, given \textcolor{Magenta}{a partial observation of it} (See~\eqref{eq:ebm})
+			\item Many possibilities of \textcolor{Blue}{unseen part of the world} for any \textcolor{Magenta}{observation}
+			\item EBMs~\cite{train-ebm,ebt} good at learning this multimodality
+			\item Can we train EBMs to \textbf{supervise VLAs}?
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{Reinforcement Learning}
+		\begin{figure}
+			\begin{center}
+				\includegraphics[width=0.5\textwidth]{figures/rl.jpg}
+			\end{center}
+		\end{figure}
+		\begin{itemize}
+			\item Learning through environment interaction and rewards~\cite{rl-book}
+			\item Many robot learning approaches train with RL~\cite{q-chunking,hil-serl}
+			\item Possible to learn \textit{superhuman} policies~\cite{Silver2016MasteringTG}, as not copying human
+		\end{itemize}
+	\end{frame}
+}
+
+\subsection{Challenges and Setup} {
+	\begin{frame}{Challenges}
+		\begin{columns}[T]
+			% Left column for the bullet points
+			\begin{column}{0.5\linewidth}
+				\begin{itemize}
+					% Point 1: Mammoth Models (associated with image pi05.png)
+					\item<1-> \textbf{VLAs are mammoth models}, need lots of human teleoperated or simulated trajectories
+					      % Point 2: Reward Functions (associated with image reward.png)
+					\item<2-> Constructing effective reward functions in RL still remains the most critical challenge
+					      % Point 3: New Reward for New Goal (associated with image multi-tasks.jpeg)
+					\item<3-> New reward function required for new goal, impractical for generalist policy training
+					      % Point 4: Contrastive Learning (associated with image contrastive-loss.png)
+					\item<4-> Training energy-based models with contrastive-learning is sample-inefficient
+				\end{itemize}
+			\end{column}
+
+			% Right column for the figure
+			\begin{column}{0.45\linewidth}
+				% Figure 1: Associated with the first point (VLAs size) - Only visible on overlay 1
+				\only<1>{
+					\begin{figure}
+						\begin{center}
+							\includegraphics[width=0.95\textwidth]{figures/pi05.png}
+						\end{center}
+						\caption{$\pi_{0.5}$ has over 3.3 billion parameters!}
+					\end{figure}
+				}
+				% Figure 2: Associated with the second point (Reward function) - Only visible on overlay 2
+				\only<2>{
+					\begin{figure}
+						\begin{center}
+							\includegraphics[width=0.45\textwidth]{figures/reward.png}
+						\end{center}
+					\end{figure}
+				}
+				% Figure 3: Associated with the third point (Multi-task/Generalist policy) - Only visible on overlay 3
+				\only<3>{
+					\begin{figure}
+						\begin{center}
+							\includegraphics[width=0.95\textwidth]{figures/multi-task.png}
+						\end{center}
+						\caption{Generalist robot policies can perform multiple tasks}
+					\end{figure}
+				}
+				% Figure 4: Associated with the fourth point (Contrastive loss) - Only visible on overlay 4
+				\only<4>{
+					\begin{figure}
+						\begin{center}
+							\includegraphics[width=0.95\textwidth]{figures/contrastive-loss.png}
+						\end{center}
+						\caption{``Push negatives, pull positives'' in contrastive learning.}
+					\end{figure}
+				}
+			\end{column}
+		\end{columns}
+	\end{frame}
+
+	\begin{frame}{Picking the Cherries}
+		What if we combined
+		\begin{itemize}
+			\item Open world generalizability of robot learning models \pause
+			\item Expressive policy learning of reinforcement learning \pause
+			\item A non-contrastively trained energy-based model as a goal-conditioned reward model \pause
+		\end{itemize}
+		\vspace{2em}
+		\center
+		\framebox{\large{
+				\textbf{\textcolor{Blue}{Towards Self-Supervised Energy-Based Value Learners for Robotics}}
+			}}
+	\end{frame}
+}
+

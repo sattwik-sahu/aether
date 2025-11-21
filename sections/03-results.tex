@@ -1,1 +1,78 @@
 \section{Results}
+\begin{frame}{Experiment}
+	\begin{itemize}
+		\item \textbf{Aim:} Can EBM differentiate right and wrong task being performed?
+		\item \textbf{Task:} Pick up red cube
+		\item \textbf{Inputs:}
+		      \begin{itemize}
+			      \item Video of robot picking up red cube $V_r$
+			      \item Video of robot picking of green cube $V_g$
+		      \end{itemize}
+		\item \textbf{Expected:} High energy for $V_g$, low for $V_r$
+	\end{itemize}
+	\begin{center}
+		\includegraphics[width=0.25\linewidth]{figures/pick-red.png}
+		\hspace{1em}
+		\includegraphics[width=0.25\linewidth]{figures/pick-green.png}
+	\end{center}
+\end{frame}
+
+\begin{frame}{Initial Results (Wrong)}
+	\begin{figure}
+		\begin{center}
+			\includegraphics[width=0.75\textwidth]{figures/result-bad.png}
+		\end{center}
+		\caption{Model is confused about right and wrong action}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Debugging: Information Leak!}
+	\begin{itemize}
+		\item Violating point 3 of regularizing conditions
+		\item The last frame carries too much information about next few frames
+		\item Need a more difficult task to learn
+		      \begin{enumerate}
+			      \item Increase masking ratio (obvious)
+			      \item Ask the model to skip $n_\text{skip}$ frames and then predict the next frames
+		      \end{enumerate}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Proof of Concept Established}
+	\begin{columns}[T]
+		\begin{column}{0.4\linewidth}
+			\begin{itemize}
+				\item Difference more prominent at end
+				\item That is where the robot actually picks up the cube
+				\item \textbf{Fix:}
+				      \begin{align*}
+					      h               & = 5  \\
+					      k               & = 1  \\
+					      n_{\text{skip}} & = 24
+				      \end{align*}
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.55\linewidth}
+			\begin{figure}
+				\centering
+				\includegraphics[width=0.95\textwidth]{figures/result-good.pdf}
+			\end{figure}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Robot See, Robot Do}
+	\begin{itemize}
+		\item Performed imitation learning on robot with Action Chunking with Transformers~\cite{act}
+		\item Achieved 58\% success rate on picking up cube
+		\item Plotted PCA of patch embeddings from vision encoder
+		\item What does the robot pay attention to?
+		\item \href{https://drive.google.com/file/d/1UzinMTOFBBk6bOAPn9zS9-_K97hv852O/view?usp=drive_link}{Click to see video}
+	\end{itemize}
+	\begin{figure}
+		\begin{center}
+			\includegraphics[width=0.5\textwidth]{figures/robot-see.png}
+		\end{center}
+	\end{figure}
+\end{frame}
+

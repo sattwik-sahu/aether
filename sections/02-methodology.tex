@@ -1,1 +1,83 @@
 \section{Methodology}
+
+\subsection{Modules in the Pipeline} {
+	\begin{frame}{The Pipeline}
+		We achieve the integration of an energy-based goal-conditioned value learner with a robot learning model in three steps
+		\begin{enumerate}
+			\item \textbf{Pre-training:} Teach the energy-based model about how robots complete certain tasks
+			\item \textbf{Reward Model:} Use the learned EBM to construct a reward model, integrate with the environment
+			\item \textbf{Reinforcement Learning:} Environment is ready, proceed to train the robot model with RL
+		\end{enumerate}
+	\end{frame}
+
+	\begin{frame}{Pre-Training the EBM}
+		\begin{columns}[T]
+			\begin{column}{0.35\linewidth}
+				\begin{equation*}
+					\textcolor{black}{E}(\textcolor{Magenta}{\mathbf{x}}, \textcolor{Blue}{\mathbf{y}}) =
+					\textcolor{PineGreen}{f_\theta}(\textcolor{Magenta}{\mathbf{x}},\textcolor{Blue}{\mathbf{y}};\textcolor{CornflowerBlue}{g})
+				\end{equation*}
+				\begin{itemize}
+					\item \textcolor{PineGreen}{The model} looks at \textcolor{Magenta}{the past $h$ frames}
+					\item Based on the given \textcolor{CornflowerBlue}{goal}
+					\item Determines whether \textcolor{Blue}{the next $k$ frames} are a valid continuation
+					\item \textcolor{Red}{High energy} means invalid
+					\item \textcolor{Green}{Low energy} means valid
+				\end{itemize}
+			\end{column}
+			\begin{column}{0.65\linewidth}
+				\begin{figure}
+					\begin{center}
+						\includegraphics[width=0.75\textwidth]{figures/jepavizor-pretrain.pdf}
+					\end{center}
+					\caption{The EBM trains simply on visual inputs}
+				\end{figure}
+			\end{column}
+		\end{columns}
+	\end{frame}
+
+	\begin{frame}{Training the Robot Model}
+		\begin{figure}
+			\begin{center}
+				\includegraphics[width=0.75\textwidth]{figures/robot-train-rl.pdf}
+			\end{center}
+		\end{figure}
+	\end{frame}
+}
+
+\subsection{EBM Internals} {
+	\begin{frame}{Inside the EBM}
+		\begin{columns}[T]
+			\begin{column}{0.45\linewidth}
+				\begin{itemize}
+					\item It is a Joint Embedding Predictive Architecture (JEPA)~\cite{Dawid2023IntroductionTL}
+					\item Non-contrastive training
+					\item Masking only during training
+					\item Regularizing conditions
+					      \begin{enumerate}
+						      \item $\max{I(e_\text{history}, o_{t-(k+h):t-k})}$
+						      \item $\max\;{I(s, o_{t-k:t-1})}$
+						      \item $\min\,{I(e_\text{history}, s)}$
+						      \item $\min\,{\mathcal{D} (s, \hat{s})}$
+					      \end{enumerate}
+				\end{itemize}
+			\end{column}
+			\begin{column}{0.5\linewidth}
+				\begin{figure}
+					\begin{center}
+						\includegraphics[width=0.95\textwidth]{figures/jepa.pdf}
+					\end{center}
+				\end{figure}
+			\end{column}
+		\end{columns}
+	\end{frame}
+
+	\begin{frame}{My Dataset}
+		\begin{itemize}
+			\item 3 cubes in front of robot
+			\item Robot is a manipulator arm
+			\item Goal is text, asking the robot to pick up one of the cubes, \textit{e.g.} ``Pick up red cube''
+		\end{itemize}
+	\end{frame}
+}
+
