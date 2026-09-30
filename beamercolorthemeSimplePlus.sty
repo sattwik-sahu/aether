@@ -24,14 +24,19 @@
 
 \definecolor{DarkBlue}{rgb}{0.05, 0.15, 0.35}
 
+% Paper palette (yolo26-rfdetr-fml/meta/commands.tex) — used by TikZ plots
+\definecolor{softblue}{RGB}{34, 116, 165}
+\definecolor{softgreen}{RGB}{247, 92, 3}
+\definecolor{softpink}{RGB}{241, 196, 15}
+
 % set beamer color themes
-\usecolortheme[named=BlueViolet]{structure}
+\usecolortheme[named=softblue]{structure}
 
 % customize colors for elements
 \setbeamercolor{titlelike}{parent=structure}
-\setbeamercolor{block title}{fg=white,bg=MediumBlue}
+\setbeamercolor{block title}{fg=white,bg=softblue}
 \setbeamercolor{block body}{fg=black,bg=MutedBlue}
-\setbeamercolor{block title example}{fg=white,bg=MediumGreen}
+\setbeamercolor{block title example}{fg=white,bg=softgreen}
 \setbeamercolor{block body example}{fg=black,bg=MutedGreen}
 \setbeamercolor{block title alerted}{fg=white,bg=MediumRed}
 \setbeamercolor{block body alerted}{fg=black,bg=MutedRed}

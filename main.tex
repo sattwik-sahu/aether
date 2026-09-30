@@ -5,9 +5,14 @@
 % -----------------------------------------
 \usepackage{fontspec}
 
-% Text fonts
-\setmainfont{Source Sans Pro}
-\setsansfont{Source Sans Pro}
+% Text fonts (fall back when Source Sans Pro is absent)
+\IfFontExistsTF{Source Sans Pro}{%
+	\setmainfont{Source Sans Pro}%
+	\setsansfont{Source Sans Pro}%
+}{%
+	\setmainfont{TeX Gyre Pagella}%
+	\setsansfont{DejaVu Sans}%
+}
 \renewcommand{\familydefault}{\sfdefault}
 
 % Load mathtools before unicode-math
@@ -44,6 +49,13 @@
 \usepackage{bookmark}
 \usepackage[ruled,vlined]{algorithm2e}
 \usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{array}
+\usepackage[flushleft]{threeparttable}
 \usepackage[
     backend=biber,
     style=ieee,
@@ -70,12 +82,6 @@
 
 \input{sections/index}
 
-\section*{References}
-\begin{frame}[allowframebreaks]{References}
-	\footnotesize
-	\printbibliography
-\end{frame}
-
 \begin{frame}[plain]
 	\vfill
 	\centering
@@ -83,4 +89,13 @@
 	\vfill
 \end{frame}
 
+\section*{References}
+\begin{frame}[allowframebreaks]{References}
+	\footnotesize
+	\printbibliography
+\end{frame}
+
+
+\appendix
+\input{sections/_appendix}
 \end{document}

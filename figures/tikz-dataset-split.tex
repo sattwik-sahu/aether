@@ -1,0 +1,40 @@
+% Dataset partition chart — copied from yolo26-rfdetr-fml/figures/dataset_class-counts.tex
+% Adapted for Beamer: bare tikzpicture (slide supplies figure env + caption + label).
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.92\linewidth,
+    height=5.2cm,
+    ybar=2pt,
+    bar width=11pt,
+    ylabel={Instances},
+    symbolic x coords={Metal Can, Plastic Bag, Plastic Bottle},
+    xtick=data,
+    ymin=0, ymax=12000,
+    scaled y ticks=false,
+    ytick={0, 2000, 4000, 6000, 8000, 10000},
+    ymajorgrids=true,
+    grid style={dashed, gray!30},
+    legend style={at={(0.5,-0.20)}, anchor=north, legend columns=-1, font=\footnotesize, draw=none},
+    x tick label style={font=\small, anchor=north, yshift=-2pt},
+    label style={font=\small},
+    tick label style={font=\footnotesize},
+    nodes near coords,
+    every node near coord/.append style={
+        font=\tiny,
+        rotate=90,
+        anchor=west,
+        /pgf/number format/fixed,
+        color=black!80
+    },
+]
+\addplot[fill=softblue, draw=softblue!70!black]
+    coordinates {(Metal Can, 1494) (Plastic Bag, 924) (Plastic Bottle, 8352)};
+\addlegendentry{Train}
+\addplot[fill=softgreen, draw=softgreen!70!black]
+    coordinates {(Metal Can, 425) (Plastic Bag, 258) (Plastic Bottle, 2357)};
+\addlegendentry{Val}
+\addplot[fill=softpink, draw=softpink!70!black]
+    coordinates {(Metal Can, 200) (Plastic Bag, 134) (Plastic Bottle, 1237)};
+\addlegendentry{Test}
+\end{axis}
+\end{tikzpicture}
